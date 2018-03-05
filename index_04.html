@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Gamedev Canvas Workshop</title>
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="480" height="320"></canvas>
+
+<script>
+    // Boilerplate to get the drawing area
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+
+    // Ball Variables
+    var x = canvas.width/2;
+    var y = canvas.height-30;
+    var ballRadius = 10;
+    var ballColor = "blue";
+    var dx = 2;
+    var dy = -2;
+
+    // Paddle Variables
+    var paddleHeight = 10;
+    var paddleWidth = 75;
+    var paddleX = (canvas.width-paddleWidth)/2;
+    var rightPressed = false;
+    var leftPressed  = false;
+
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+
+
+    function keyDownHandler(e) {
+        switch(e.keyCode) {
+            case 37:
+                leftPressed = true;
+                break;
+            case 39:
+                rightPressed = true;
+        }
+    }
+
+    function keyUpHandler(e) {
+        switch(e.keyCode) {
+            case 37:
+                leftPressed = false;
+                break;
+            case 39:
+                rightPressed = false;
+        }
+    }
+
+    function drawBall() {
+        ctx.beginPath();
+        ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+        ctx.fillStyle = ballColor;
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function drawPaddle() {
+        ctx.beginPath();
+        ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function randomColor() {
+        return '#'+Math.random().toString(16).substr(-6);
+    }
+
+    function draw() {
+        // Clean the drawing area before each draw.
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall();
+        drawPaddle();
+
+        // Bounce off the top of the frame or bottom of the frame.
+        if (y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
+          dy = -dy;
+          ballColor = randomColor();
+        }
+
+        // Bounce off the top of the frame or bottom of the frame.
+        if (x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
+          dx = -dx;
+          ballColor = randomColor();
+        }
+        if (rightPressed && paddleX < canvas.width - paddleWidth) {
+        <!--if (rightPressed) {-->
+            paddleX +=7;
+        }
+        else if (leftPressed && paddleX > 0) {
+        <!--else if (leftPressed)-->
+            paddleX -=7;
+        }
+
+        <!--paddleX += dx;-->
+        x += dx;
+        y += dy;
+    }
+    setInterval(draw, 10);
+</script>
+
+</body>
+</html>
