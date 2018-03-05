@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Gamedev Canvas Workshop</title>
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="480" height="320"></canvas>
+
+<script>
+    // Boilerplate to get the drawing area
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+
+    var x = canvas.width/2;
+    var y = canvas.height-30;
+    var ballRadius = 10;
+    var ballColor = "blue";
+    var dx = 2;
+    var dy = -2;
+
+    function drawBall() {
+        ctx.beginPath();
+        ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+        ctx.fillStyle = ballColor;
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function randomColor() {
+        return '#'+Math.random().toString(16).substr(-6);
+    }
+
+    function draw() {
+        // Clean the drawing area before each draw.
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall();
+
+        // Bounce off the top of the frame or bottom of the frame.
+        if (y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
+          dy = -dy;
+          ballColor = randomColor();
+        }
+
+        // Bounce off the top of the frame or bottom of the frame.
+        if (x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
+          dx = -dx;
+          ballColor = randomColor();
+        }
+
+        x += dx;
+        y += dy;
+    }
+
+    setInterval(draw, 10);
+</script>
+
+</body>
+</html>
